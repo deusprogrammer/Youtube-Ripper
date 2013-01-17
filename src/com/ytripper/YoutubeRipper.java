@@ -4,6 +4,7 @@
  */
 package com.ytripper;
 
+import com.ytripper.video.YoutubeVideoObject;
 import com.ytripper.net.YoutubeConnection;
 import java.io.IOException;
 
@@ -18,6 +19,9 @@ public class YoutubeRipper {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        YoutubeConnection.downloadVideoStream("http://www.youtube.com/watch?v=obAiDec2m3k", 720, "mp4", "E:\\Media\\Youtube");
+        YoutubeVideoObject youtubeVideo = YoutubeConnection.getYoutubeVideoObject("http://www.youtube.com/watch?v=4ZLsV_B8X5w");
+        if (youtubeVideo != null) {
+            youtubeVideo.downloadVideoStream(720, "mp4", "E:\\Media\\Youtube");
+        }
     }
 }

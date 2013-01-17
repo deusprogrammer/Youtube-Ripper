@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ytripper;
+package com.ytripper.net;
 
+import com.ytripper.video.VideoFormat;
 import com.ytripper.util.StringUtil;
 
 import java.io.*;
@@ -22,27 +23,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
  * @author mmain
  */
 public class YoutubeVideoStream implements Comparable {
-    VideoFormat format;
-    String url;
-    String title;
+    protected VideoFormat format;
+    protected String url;
     
-    protected static HashMap<String, Object> parseQueryString(String url) {
-        if (url.indexOf("?") == -1) {
-            return null;
-        }
-        
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        String queryString = url.substring(url.indexOf("?") + 1);
-        String[] elements = queryString.split("&");
-        
-        for (String element : elements) {
-            String[] kvm = element.split("=", 2);
-            map.put(kvm[0], kvm[1]);
-        }
-        
-        return map;
-    }
-    
+    protected HashMap<String, String> fmtMap;
+   
     public String toString() {
         return "URL:    " + url + "\n" + "FORMAT: " + format;
     }
@@ -51,19 +36,20 @@ public class YoutubeVideoStream implements Comparable {
         return format;
     }
     
-    public YoutubeVideoStream(String url, String quality, String signature, String title) {
-        this.url = url + "&signature=" + signature;
-        this.title = title;
-        
-        HashMap<String, Object> queryString = parseQueryString(url);
-
-        if (queryString != null) {
-            int itag = Integer.parseInt(quality);
-            this.format = new VideoFormat(itag);
-        }
+    public HashMap<String, String> getFormatMap() {
+        return fmtMap;
     }
     
-    public boolean writeToFile(String downloadDirectory) throws IOException {
+    public YoutubeVideoStream(HashMap<String, String> fmtMap) {
+        this.fmtMap = fmtMap;
+        url = fmtMap.get("url").replaceFirst("http%3A%2F%2F", "http://").replaceAll("%3F","?").replaceAll("%2F", "/").replaceAll("%3D","=").replaceAll("%26", "&").replaceAll("\\u0026", "&").replaceAll("%252C", "%2C");
+        url = url + "&signature=" + fmtMap.get("sig");
+
+        int itag = Integer.parseInt(fmtMap.get("itag"));
+        this.format = new VideoFormat(itag);
+    }
+    
+    public boolean writeToFile(String downloadDirectory, String filename) throws IOException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse hr;
         HttpHost target = new HttpHost(StringUtil.getHost(url), 80, "http");
@@ -90,12 +76,12 @@ public class YoutubeVideoStream implements Comparable {
             return false;
         }
                 
-        title = title.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_").replace("!", "").replace("?", "") + "." + format.codec;
+        filename = filename.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_").replace("!", "").replace("?", "") + "." + format.getCodec();
         FileOutputStream out;
-        System.out.println("TITLE: " + title);
+        System.out.println("TITLE: " + filename);
 
         try {
-            out = new FileOutputStream(new File(downloadDirectory + "/" + title));
+            out = new FileOutputStream(new File(downloadDirectory + "/" + filename));
             BufferedInputStream in = new BufferedInputStream(hr.getEntity().getContent());
             byte[] bytes = new byte[4096];
             int bytesRead = 0;
@@ -115,6 +101,6 @@ public class YoutubeVideoStream implements Comparable {
     }
 
     public int compareTo(Object stream) {
-        return ((YoutubeVideoStream)stream).getFormat().resolution - this.getFormat().resolution;
+        return ((YoutubeVideoStream)stream).getFormat().getResolution() - this.getFormat().getResolution();
     }
 }

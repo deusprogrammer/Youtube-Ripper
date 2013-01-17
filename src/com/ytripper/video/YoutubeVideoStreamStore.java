@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ytripper;
+package com.ytripper.video;
 
+import com.ytripper.net.YoutubeVideoStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,6 +19,7 @@ public class YoutubeVideoStreamStore {
     }
     
     public void add(YoutubeVideoStream stream) {
+        System.out.println("ADDING STREAM!");
         if (stream.getFormat() != null) {
             streams.add(stream);
             Collections.sort(streams);
