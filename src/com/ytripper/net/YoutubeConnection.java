@@ -18,7 +18,7 @@ public class YoutubeConnection {
     
     public static int nVideos = 0;
 
-    public static boolean getVideoStream(String url, int desiredResolution, String desiredCodec) throws IOException {
+    public static boolean downloadVideoStream(String url, int desiredResolution, String desiredCodec, String downloadDirectory) throws IOException {
         YoutubeVideoStreamStore streams = new YoutubeVideoStreamStore();
         HttpClient httpclient = new DefaultHttpClient();
         httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
@@ -40,7 +40,7 @@ public class YoutubeConnection {
         
         YoutubeVideoStream closestStream = closest.getOne();
         if (closestStream != null) {
-            closestStream.writeToFile();
+            closestStream.writeToFile(downloadDirectory);
         } else {
             return false;
         }

@@ -18,6 +18,6 @@ public class YoutubeRipper {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        YoutubeConnection.getVideoStream("http://www.youtube.com/watch?v=xLgzT0FcxXw", 720, "mp4");
+        YoutubeConnection.downloadVideoStream("http://www.youtube.com/watch?v=obAiDec2m3k", 720, "mp4", "E:\\Media\\Youtube");
     }
 }

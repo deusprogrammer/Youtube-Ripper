@@ -4,8 +4,6 @@
  */
 package com.ytripper;
 
-import com.ytripper.net.YoutubeResponseHandler;
-import com.ytripper.net.YoutubeStreamResponseHandler;
 import com.ytripper.util.StringUtil;
 
 import java.io.*;
@@ -65,10 +63,10 @@ public class YoutubeVideoStream implements Comparable {
         }
     }
     
-    public boolean writeToFile() throws IOException {
+    public boolean writeToFile(String downloadDirectory) throws IOException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse hr;
-        HttpHost target = new HttpHost( StringUtil.getHost(url), 80, "http" );
+        HttpHost target = new HttpHost(StringUtil.getHost(url), 80, "http");
         InputStream stream;
         
         httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
@@ -78,7 +76,6 @@ public class YoutubeVideoStream implements Comparable {
 
             System.out.println("Executing request " + url);
 
-            //ResponseHandler<InputStream> responseHandler = new YoutubeStreamResponseHandler();
             hr = httpclient.execute(target, httpget);
         } catch (Exception e) {
             System.out.println("EXCEPTION: " + e.getMessage());
@@ -93,12 +90,12 @@ public class YoutubeVideoStream implements Comparable {
             return false;
         }
                 
-        title = title.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_") + "." + format.codec;
+        title = title.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_").replace("!", "").replace("?", "") + "." + format.codec;
         FileOutputStream out;
         System.out.println("TITLE: " + title);
 
         try {
-            out = new FileOutputStream(new File("./" + title));
+            out = new FileOutputStream(new File(downloadDirectory + "/" + title));
             BufferedInputStream in = new BufferedInputStream(hr.getEntity().getContent());
             byte[] bytes = new byte[4096];
             int bytesRead = 0;
