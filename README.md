@@ -1,6 +1,6 @@
 # YoutubeRipper Library
 
-	In it's current state, this code is unrefined and not a distributable jar as of yet.  Currently the code only functions so much as downloading the Youtube video associated with a given URL.  Check back on later commits as I update this program.
+	The code is ready to be packaged as a jar.  The library also allows for ripping of entire playlists.  This code works as of 1/17/2013.  However if YouTube changes the way their page is formatted, it could quickly cease function.  Keep that in mind.  However as YouTube changes, I will change the source code in such a way that it won't affect the way the library is used.
 
 
 ## Ripping Algorithm

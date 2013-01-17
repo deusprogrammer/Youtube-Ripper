@@ -23,6 +23,11 @@ public class YoutubeVideoObject {
         this.title = (String)((HashMap<String, Object>)videoInfo.get("args")).get("title");
     }
     
+    public YoutubeVideoStream getStream(Integer quality, String codec) {
+        YoutubeVideoStreamStore closest = streams.findHighestResolution(quality).findByCodec(codec);
+        return closest.getOne();
+    }
+    
     public boolean downloadVideoStream(Integer quality, String codec, String downloadDirectory) {
         YoutubeVideoStreamStore closest = streams.findHighestResolution(quality).findByCodec(codec);
         
@@ -56,7 +61,12 @@ public class YoutubeVideoObject {
     }
     
     public void addStream(YoutubeVideoStream stream) {
+        stream.setTitle(title);
         streams.add(stream);
+    }
+    
+    public String getTitle() {
+        return title;
     }
     
     public YoutubeVideoStreamStore getStreams() {

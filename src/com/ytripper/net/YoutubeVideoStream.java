@@ -25,6 +25,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class YoutubeVideoStream implements Comparable {
     protected VideoFormat format;
     protected String url;
+    protected Double percentDone = 0.0;
+    
+    protected String title;
     
     protected HashMap<String, String> fmtMap;
    
@@ -49,11 +52,15 @@ public class YoutubeVideoStream implements Comparable {
         this.format = new VideoFormat(itag);
     }
     
-    public boolean writeToFile(String downloadDirectory, String filename) throws IOException {
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public boolean writeToFile(String downloadDirectory, String filename) {
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse hr;
         HttpHost target = new HttpHost(StringUtil.getHost(url), 80, "http");
-        InputStream stream;
+        FileOutputStream out;
         
         httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
 
@@ -75,13 +82,20 @@ public class YoutubeVideoStream implements Comparable {
         if (!hr.getFirstHeader("Content-Type").getValue().matches("video/.*")) {
             return false;
         }
-                
+        
+        //Clean up directory name and create it if it doesn't exist
+        downloadDirectory = downloadDirectory.replace(" ", "_").replace("(", "_").replace(")", "_").replace("!", "").replace("?", "");
+        new File(downloadDirectory).mkdirs();
+        
+        //Clean up filename
         filename = filename.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_").replace("!", "").replace("?", "") + "." + format.getCodec();
-        FileOutputStream out;
-        System.out.println("TITLE: " + filename);
+        
+        //Create full path
+        String fullPath = downloadDirectory + "/" + filename;
+        System.out.println("PATH: " + fullPath);
 
         try {
-            out = new FileOutputStream(new File(downloadDirectory + "/" + filename));
+            out = new FileOutputStream(new File(fullPath));
             BufferedInputStream in = new BufferedInputStream(hr.getEntity().getContent());
             byte[] bytes = new byte[4096];
             int bytesRead = 0;
@@ -90,16 +104,21 @@ public class YoutubeVideoStream implements Comparable {
             while ((bytesRead = in.read(bytes)) > 0) {
                 out.write(bytes, 0, bytesRead);
                 totalBytesRead += bytesRead;
-                System.out.println("BYTES READ: " + totalBytesRead);
-                System.out.println("PERCENT: " + ((double)totalBytesRead/(double)bytesMax)*100.0);
+                percentDone = ((double)totalBytesRead/(double)bytesMax)*100.0;
             }
+            out.close();
             return true;
-         } catch (Exception e) {
+         } catch (IOException | IllegalStateException | NumberFormatException e) {
             System.out.println("EXCEPTION: " + e.getMessage());
             return false;
         }
     }
+    
+    public Double getPercentDone() {
+        return percentDone;
+    }
 
+    @Override
     public int compareTo(Object stream) {
         return ((YoutubeVideoStream)stream).getFormat().getResolution() - this.getFormat().getResolution();
     }

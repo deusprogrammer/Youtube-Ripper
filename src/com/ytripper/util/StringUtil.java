@@ -4,6 +4,9 @@
  */
 package com.ytripper.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  *
  * @author mmain
@@ -30,5 +33,14 @@ public class StringUtil {
         shost = sURL.substring(0, sURL.length()-shost.length());
         shost = shost.toLowerCase().replaceFirst("http://", "").replaceAll("/", "");
         return(shost);
+    }
+    
+    public static String slurp (InputStream in) throws IOException {
+        StringBuffer out = new StringBuffer();
+        byte[] b = new byte[4096];
+        for (int n; (n = in.read(b)) != -1;) {
+            out.append(new String(b, 0, n));
+        }
+        return out.toString();
     }
 }
