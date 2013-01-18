@@ -1,3 +1,4 @@
 build/
 *.class
 *.mp4
+/dist/
