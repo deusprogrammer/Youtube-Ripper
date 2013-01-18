@@ -39,6 +39,7 @@ public class YoutubeDownloadJob {
             success = videoStream.writeToFile(downloadDirectory, videoObject.getTitle());
         }
         else {
+            System.out.println("***STREAM IS NULL!");
             success = false;
         }
     }

@@ -21,7 +21,7 @@ public class YoutubeRipper {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         // TODO code application logic here
         /*
         YoutubeVideoObject youtubeVideo = YoutubeConnection.getYoutubeVideoObject("http://www.youtube.com/watch?v=4ZLsV_B8X5w");
@@ -31,7 +31,7 @@ public class YoutubeRipper {
         */
         
         //Get playlist object
-        YoutubePlaylistObject playlist = YoutubeConnection.getYoutubePlaylistObject("PL3A352D61283EB216");
+        YoutubePlaylistObject playlist = YoutubeConnection.getYoutubePlaylistObject("PLMy27K3PNxwiGfp1oJ0RR6Em3_9IqwDFE");
         
         //Create a new thread pool
         YoutubeDownloadThreadPool pool = new YoutubeDownloadThreadPool();
@@ -52,7 +52,11 @@ public class YoutubeRipper {
             if (job != null) {
                 completedJobs++;
                 System.out.println("Completed job " + job.getUuid());
-                System.out.println("Success:      " + (job.getSuccess() ? "Yes" : "No") + "\n");
+                System.out.println("Success:      " + (job.getSuccess() ? "Yes" : "No"));
+                System.out.println(completedJobs + "/" + nJobs + "\n");
+            }
+            else {
+                Thread.sleep(10000);
             }
         }
         

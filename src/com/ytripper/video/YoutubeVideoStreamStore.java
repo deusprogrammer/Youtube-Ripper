@@ -64,6 +64,10 @@ public class YoutubeVideoStreamStore {
             }
         }
         
+        if (found.streams.size() == 0) {
+            return this;
+        }
+        
         return found;
     }
     

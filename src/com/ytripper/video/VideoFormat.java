@@ -22,17 +22,20 @@ public class VideoFormat {
             case 45:
             case 44:
             case 43:
+            case 35:
+            case 34:
             case 5:
                 codec = "flv";
                 break;
             case 37:
-            case 22:
-            case 35:
-            case 18:
-            case 34:
             case 36:
+            case 22:
+            case 18:
             case 17:
                 codec = "mp4";
+                break;
+            default:
+                codec = "unk";
                 break;
         }
         
@@ -54,11 +57,15 @@ public class VideoFormat {
                 resolution = 360;
                 break;
             case 36:
+            case 18:
             case 5:
                 resolution = 240;
                 break;
             case 17:
                 resolution = 114;
+                break;
+            default:
+                resolution = 0;
                 break;
         }
     }
