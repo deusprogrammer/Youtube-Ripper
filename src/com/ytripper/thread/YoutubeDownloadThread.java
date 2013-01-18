@@ -36,9 +36,12 @@ public class YoutubeDownloadThread extends Thread {
             while ((job = pool.getJob()) == null) {
                 try {
                     this.sleep(1000);
-                    continue;
                 } catch (InterruptedException ex) {
                     Logger.getLogger(YoutubeDownloadThread.class.getName()).log(Level.SEVERE, null, ex);
+                    return;
+                }
+                
+                if (!running) {
                     return;
                 }
             }

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
@@ -31,6 +30,7 @@ public class YoutubeVideoStream implements Comparable {
     
     protected HashMap<String, String> fmtMap;
    
+    @Override
     public String toString() {
         return "URL:    " + url + "\n" + "FORMAT: " + format;
     }

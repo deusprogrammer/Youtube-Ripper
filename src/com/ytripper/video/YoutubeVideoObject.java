@@ -69,6 +69,10 @@ public class YoutubeVideoObject {
         return title;
     }
     
+    public String getSafeTitle() {
+        return title.replace(" ", "_").replace("\\", "").replace("/", "").replace(">", "").replace("<", "").replace("\"", "").replace("|", "").replace("?", "").replace("*", "").replace(":", "");
+    }
+    
     public YoutubeVideoStreamStore getStreams() {
         return streams;
     }

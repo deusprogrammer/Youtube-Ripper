@@ -43,6 +43,11 @@ public class YoutubeDownloadThreadPool {
         }
     }
     
+    public synchronized String addJob(YoutubeDownloadJob job) {
+        jobs.add(job);
+        return job.getUuid();
+    }
+    
     public synchronized String addJob(YoutubeVideoObject youtubeVideo, Integer quality, String codec, String downloadDirectory) {
         YoutubeDownloadJob job = new YoutubeDownloadJob(youtubeVideo, quality, codec, downloadDirectory);
         jobs.add(job);

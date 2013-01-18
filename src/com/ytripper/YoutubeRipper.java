@@ -22,44 +22,8 @@ public class YoutubeRipper {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        // TODO code application logic here
-        /*
-        YoutubeVideoObject youtubeVideo = YoutubeConnection.getYoutubeVideoObject("http://www.youtube.com/watch?v=4ZLsV_B8X5w");
-        if (youtubeVideo != null) {
-            youtubeVideo.downloadVideoStream(720, "mp4", "E:\\Media\\Youtube");
-        }
-        */
+        YoutubeRipperFrame frame = new YoutubeRipperFrame();
         
-        //Get playlist object
-        YoutubePlaylistObject playlist = YoutubeConnection.getYoutubePlaylistObject("PLMy27K3PNxwiGfp1oJ0RR6Em3_9IqwDFE");
-        
-        //Create a new thread pool
-        YoutubeDownloadThreadPool pool = new YoutubeDownloadThreadPool();
-        
-        Integer completedJobs = 0;
-        Integer nJobs = playlist.getYoutubeVideoObjects().size();
-        
-        //Pass jobs to thread pool
-        for (YoutubeVideoObject youtubeVideo : playlist.getYoutubeVideoObjects()) {
-            String uuid = pool.addJob(youtubeVideo, 720, "mp4", "E:/Media/Youtube/" + playlist.getSafeTitle());
-            System.out.println("Created job: " + uuid);
-        }
-        
-        //Wait for jobs to complete
-        while (completedJobs < nJobs) {
-            YoutubeDownloadJob job = pool.getCompleted();
-            
-            if (job != null) {
-                completedJobs++;
-                System.out.println("Completed job " + job.getUuid());
-                System.out.println("Success:      " + (job.getSuccess() ? "Yes" : "No"));
-                System.out.println(completedJobs + "/" + nJobs + "\n");
-            }
-            else {
-                Thread.sleep(10000);
-            }
-        }
-        
-        System.out.println("All jobs complete!");
+        frame.setVisible(true);
     }
 }

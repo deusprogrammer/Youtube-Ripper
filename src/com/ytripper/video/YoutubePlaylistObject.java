@@ -45,7 +45,7 @@ public class YoutubePlaylistObject {
     }
     
     public String getSafeTitle() {
-        return title.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_").replace("!", "").replace("?", "");
+        return title.replace(" ", "_").replace("\\", "").replace("/", "").replace(">", "").replace("<", "").replace("\"", "").replace("|", "").replace("?", "").replace("*", "").replace(":", "");
     }
    
 }

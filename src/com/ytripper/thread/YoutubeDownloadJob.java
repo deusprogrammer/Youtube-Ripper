@@ -36,7 +36,7 @@ public class YoutubeDownloadJob {
     
     public void startDownload() {
         if (videoStream != null) {
-            success = videoStream.writeToFile(downloadDirectory, videoObject.getTitle());
+            success = videoStream.writeToFile(downloadDirectory, videoObject.getSafeTitle());
         }
         else {
             System.out.println("***STREAM IS NULL!");
@@ -54,5 +54,9 @@ public class YoutubeDownloadJob {
     
     public String getUuid() {
         return uuid;
+    }
+    
+    public String toString() {
+        return videoObject.getTitle() + " ( " + String.format("%.2f", videoStream.getPercentDone()) + "% )";
     }
 }
