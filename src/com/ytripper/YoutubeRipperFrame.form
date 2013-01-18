@@ -48,7 +48,9 @@
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="downloadDirectoryField" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="verifyButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="saveButton" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="youtubeUrl" max="32767" attributes="0"/>
                                   <Component id="playlistId" min="-2" pref="367" max="-2" attributes="0"/>
@@ -86,7 +88,8 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="downloadDirectoryField" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel4" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="saveButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="verifyButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
@@ -141,6 +144,9 @@
               <StringArray count="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="runningTasksListValueChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -156,12 +162,21 @@
     </Component>
     <Component class="javax.swing.JTextField" name="downloadDirectoryField">
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="saveButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Save"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="verifyButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Verify"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="verifyButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

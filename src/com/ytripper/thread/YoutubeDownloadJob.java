@@ -21,7 +21,7 @@ public class YoutubeDownloadJob implements Comparable {
     protected String downloadDirectory;
     
     protected String uuid = UUID.randomUUID().toString();
-    protected boolean success;
+    protected boolean success = true;
     
     public YoutubeDownloadJob() {}
     
@@ -56,8 +56,18 @@ public class YoutubeDownloadJob implements Comparable {
         return uuid;
     }
     
+    public String getMessage() {
+        return videoStream.getMessage();
+    }
+    
     public String toString() {
-        return videoObject.getTitle() + " ( " + String.format("%.2f", videoStream.getPercentDone()) + "% )";
+        String ret = videoObject.getTitle() + " ( " + String.format("%.2f", videoStream.getPercentDone()) + "% )";
+        if (!success) {
+            ret += "[FAILED]";
+        } else if (success && getPercentDone() >= 100.0) {
+            ret += "[SUCCESS]";
+        }
+        return ret;
     }
 
     @Override

@@ -11,8 +11,10 @@ import com.ytripper.video.YoutubePlaylistObject;
 import com.ytripper.video.YoutubeVideoObject;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -20,10 +22,12 @@ import javax.swing.Timer;
  * @author mmain
  */
 public class YoutubeRipperFrame extends javax.swing.JFrame {
-    YoutubeDownloadThreadPool pool = new YoutubeDownloadThreadPool();
-    ArrayList<YoutubeDownloadJob> runningTasks = new ArrayList<>();
+    protected YoutubeDownloadThreadPool pool = new YoutubeDownloadThreadPool();
+    protected ArrayList<YoutubeDownloadJob> runningTasks = new ArrayList<>();
     
-    private Timer timer;
+    protected Timer timer;
+    
+    protected String oldDirectory;
     
     /**
      * Creates new form YoutubeRipperFrame
@@ -64,7 +68,8 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         downloadDirectoryField = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
+        verifyButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Deus the Ripper (YouTube Ripping Tool)");
@@ -87,16 +92,29 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
             }
         });
 
+        runningTasksList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                runningTasksListValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(runningTasksList);
 
         jLabel3.setText("Running Tasks:");
 
         jLabel4.setText("Download Directory");
 
-        jButton1.setText("Save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveButton.setText("Save");
+        saveButton.setEnabled(false);
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                saveButtonActionPerformed(evt);
+            }
+        });
+
+        verifyButton.setText("Verify");
+        verifyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verifyButtonActionPerformed(evt);
             }
         });
 
@@ -125,7 +143,9 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(downloadDirectoryField)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton1))
+                                        .addComponent(verifyButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(saveButton))
                                     .addComponent(youtubeUrl)
                                     .addComponent(playlistId, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(70, 70, 70)
@@ -152,7 +172,8 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(downloadDirectoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(saveButton)
+                    .addComponent(verifyButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addGap(15, 15, 15)
@@ -193,16 +214,35 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
         runningTasksList.setListData(runningTasks.toArray());
     }//GEN-LAST:event_downloadPlaylistButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         YoutubeRipperConfig.setDownloadDirectory(downloadDirectoryField.getText());
         YoutubeRipperConfig.save();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        oldDirectory = downloadDirectoryField.getText();
+        saveButton.setEnabled(false);
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void runningTasksListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_runningTasksListValueChanged
+        if (runningTasksList.getSelectedValue() != null) {
+            YoutubeDownloadJob job = (YoutubeDownloadJob)runningTasksList.getSelectedValue();
+            System.out.println("LIST SELECTION CHANGED: " + job.getMessage());
+            JOptionPane.showMessageDialog(null, "UUID: " + job.getUuid() + "\nMESSAGE: " + job.getMessage());
+        }
+    }//GEN-LAST:event_runningTasksListValueChanged
+
+    private void verifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifyButtonActionPerformed
+        File directory = new File(downloadDirectoryField.getText());
+        if (directory.exists()) {
+            saveButton.setEnabled(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Directory doesn't exist!");
+        }
+    }//GEN-LAST:event_verifyButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField downloadDirectoryField;
     private javax.swing.JButton downloadOneButton;
     private javax.swing.JButton downloadPlaylistButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -210,6 +250,8 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField playlistId;
     private javax.swing.JList runningTasksList;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JButton verifyButton;
     private javax.swing.JTextField youtubeUrl;
     // End of variables declaration//GEN-END:variables
 }

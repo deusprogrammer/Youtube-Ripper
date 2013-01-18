@@ -27,6 +27,7 @@ public class YoutubeVideoStream implements Comparable {
     protected Double percentDone = 0.0;
     
     protected String title;
+    protected String message = null;
     
     protected HashMap<String, String> fmtMap;
    
@@ -37,6 +38,10 @@ public class YoutubeVideoStream implements Comparable {
     
     public VideoFormat getFormat() {
         return format;
+    }
+    
+    public String getMessage() {
+        return message;
     }
     
     public HashMap<String, String> getFormatMap() {
@@ -72,6 +77,7 @@ public class YoutubeVideoStream implements Comparable {
             hr = httpclient.execute(target, httpget);
         } catch (Exception e) {
             System.out.println("EXCEPTION: " + e.getMessage());
+            message = e.getMessage();
             httpclient.getConnectionManager().shutdown();
             return false;
         }
@@ -107,9 +113,11 @@ public class YoutubeVideoStream implements Comparable {
                 percentDone = ((double)totalBytesRead/(double)bytesMax)*100.0;
             }
             out.close();
+            message = "Job complete!";
             return true;
          } catch (IOException | IllegalStateException | NumberFormatException e) {
             System.out.println("EXCEPTION: " + e.getMessage());
+            message = e.getMessage();
             return false;
         }
     }
