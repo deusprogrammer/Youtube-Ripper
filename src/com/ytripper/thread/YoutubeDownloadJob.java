@@ -12,7 +12,7 @@ import java.util.UUID;
  *
  * @author mmain
  */
-public class YoutubeDownloadJob {
+public class YoutubeDownloadJob implements Comparable {
     protected YoutubeVideoObject videoObject;
     protected YoutubeVideoStream videoStream;
     
@@ -58,5 +58,10 @@ public class YoutubeDownloadJob {
     
     public String toString() {
         return videoObject.getTitle() + " ( " + String.format("%.2f", videoStream.getPercentDone()) + "% )";
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return ((YoutubeDownloadJob)o).getPercentDone().intValue() - this.getPercentDone().intValue();
     }
 }

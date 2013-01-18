@@ -12,6 +12,7 @@ import com.ytripper.video.YoutubeVideoObject;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.Timer;
 
 /**
@@ -32,6 +33,7 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
         timer = new Timer(40, new ActionListener() {
             @Override 
             public void actionPerformed(ActionEvent e) {
+                Collections.sort(runningTasks);
                 runningTasksList.setListData(runningTasks.toArray());
             }
         });
@@ -57,6 +59,8 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         runningTasksList = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        downloadDirectoryField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Deus the Ripper (YouTube Ripping Tool)");
@@ -65,7 +69,7 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Youtube Playlist ID");
 
-        downloadOneButton.setText("Download Single Video");
+        downloadOneButton.setText("Download Video");
         downloadOneButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 downloadOneButtonActionPerformed(evt);
@@ -83,6 +87,10 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
 
         jLabel3.setText("Running Tasks:");
 
+        jLabel4.setText("Download Directory");
+
+        downloadDirectoryField.setText("./");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,20 +100,30 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(youtubeUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
-                            .addComponent(playlistId))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(downloadOneButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(downloadPlaylistButton, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1))
+                                .addGap(30, 30, 30)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(downloadDirectoryField)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(youtubeUrl)
+                                    .addComponent(playlistId, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(70, 70, 70)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(downloadPlaylistButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(downloadOneButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -121,11 +139,15 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(playlistId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(downloadPlaylistButton))
-                .addGap(23, 23, 23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(downloadDirectoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addGap(15, 15, 15)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -134,33 +156,41 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
     private void downloadOneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadOneButtonActionPerformed
         YoutubeVideoObject video = YoutubeConnection.getYoutubeVideoObject(youtubeUrl.getText());
         
-        YoutubeDownloadJob job = new YoutubeDownloadJob(video, 720, "mp4", "E:/media/Youtube/singles");
+        String downloadDirectory = downloadDirectoryField.getText();
+        
+        YoutubeDownloadJob job = new YoutubeDownloadJob(video, 720, "mp4", downloadDirectory + "/singles");
         pool.addJob(job);
         runningTasks.add(job);
         
         youtubeUrl.setText("");
+        Collections.sort(runningTasks);
         runningTasksList.setListData(runningTasks.toArray());
     }//GEN-LAST:event_downloadOneButtonActionPerformed
 
     private void downloadPlaylistButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadPlaylistButtonActionPerformed
         YoutubePlaylistObject playlist = YoutubeConnection.getYoutubePlaylistObject(playlistId.getText());
         
+        String downloadDirectory = downloadDirectoryField.getText();
+        
         for (YoutubeVideoObject video : playlist.getYoutubeVideoObjects()) {
-            YoutubeDownloadJob job = new YoutubeDownloadJob(video, 720, "mp4", "E:/media/Youtube/" + playlist.getSafeTitle());
+            YoutubeDownloadJob job = new YoutubeDownloadJob(video, 720, "mp4", downloadDirectory + "/" + playlist.getSafeTitle());
             pool.addJob(job);
             runningTasks.add(job);
         }
         
         playlistId.setText("");
+        Collections.sort(runningTasks);
         runningTasksList.setListData(runningTasks.toArray());
     }//GEN-LAST:event_downloadPlaylistButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField downloadDirectoryField;
     private javax.swing.JButton downloadOneButton;
     private javax.swing.JButton downloadPlaylistButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField playlistId;
     private javax.swing.JList runningTasksList;
