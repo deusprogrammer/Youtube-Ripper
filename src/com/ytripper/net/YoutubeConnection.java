@@ -141,12 +141,14 @@ public class YoutubeConnection {
             HashMap<String, Object> videoMap = (HashMap)video;
             HashMap<String, String> contentMap = (HashMap)videoMap.get("content");
             
-            String src = contentMap.get("src");
-            src = src.substring(src.lastIndexOf("/") + 1, src.indexOf("?"));
-            src = "http://www.youtube.com/watch?v=" + src;
-            
-            YoutubeVideoObject youtubeVideo = getYoutubeVideoObject(src);
-            playlist.addYoutubeVideoObject(youtubeVideo);
+            if (contentMap != null) {
+                String src = contentMap.get("src");
+                src = src.substring(src.lastIndexOf("/") + 1, src.indexOf("?"));
+                src = "http://www.youtube.com/watch?v=" + src;
+
+                YoutubeVideoObject youtubeVideo = getYoutubeVideoObject(src);
+                playlist.addYoutubeVideoObject(youtubeVideo);
+            }
         }
         
         httpclient.getConnectionManager().shutdown();
