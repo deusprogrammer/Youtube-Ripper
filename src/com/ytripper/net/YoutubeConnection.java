@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ytripper.util.StringUtil;
 import com.ytripper.video.YoutubePlaylistObject;
 import com.ytripper.video.YoutubeVideoObject;
-import com.ytripper.video.YoutubeVideoStreamStore;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,11 +141,18 @@ public class YoutubeConnection {
             
             if (contentMap != null) {
                 String src = contentMap.get("src");
-                src = src.substring(src.lastIndexOf("/") + 1, src.indexOf("?"));
-                src = "http://www.youtube.com/watch?v=" + src;
+                
+                try {
+                    src = src.substring(src.lastIndexOf("/") + 1, src.indexOf("?"));
 
-                YoutubeVideoObject youtubeVideo = getYoutubeVideoObject(src);
-                playlist.addYoutubeVideoObject(youtubeVideo);
+                    src = "http://www.youtube.com/watch?v=" + src;
+
+                    YoutubeVideoObject youtubeVideo = getYoutubeVideoObject(src);
+                    playlist.addYoutubeVideoObject(youtubeVideo);
+                } catch (Exception e) {
+                    System.out.println("EXCEPTION: " + e.getMessage());
+                    continue;
+                }
             }
         }
         
