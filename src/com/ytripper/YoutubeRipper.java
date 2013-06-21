@@ -4,12 +4,6 @@
  */
 package com.ytripper;
 
-import com.ytripper.video.YoutubeVideoObject;
-import com.ytripper.net.YoutubeConnection;
-import com.ytripper.thread.YoutubeDownloadJob;
-import com.ytripper.thread.YoutubeDownloadThread;
-import com.ytripper.thread.YoutubeDownloadThreadPool;
-import com.ytripper.video.YoutubePlaylistObject;
 import java.io.IOException;
 
 /**

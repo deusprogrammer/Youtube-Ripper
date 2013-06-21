@@ -4,8 +4,12 @@
  */
 package com.ytripper.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -22,6 +26,16 @@ public class StringUtil {
     public static final String szPROXYREGEX = "(^((H|h)(T|t)(T|t)(P|p)://)?([a-zA-Z0-9]+:[a-zA-Z0-9]+@)?([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])(\\.([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9]))*(:[0-90-90-90-9]{1,4})?$)|()";
 
     private static final String szPLAYLISTREGEX = "/view_play_list\\?p=([A-Za-z0-9]*)&playnext=[0-9]{1,2}&v=";
+    
+    public static boolean isJSONValid(String test) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+             mapper.readValue(test, HashMap.class);
+            return true;
+        } catch(Exception ex) { 
+            return false;
+        }
+    }
     
     public static String getURI(String sURL) {
         String suri = "/".concat(sURL.replaceFirst(szYTHOSTREGEX, ""));

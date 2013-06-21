@@ -92,9 +92,23 @@ public class YoutubeConnection {
         return fmtMap;
     }
     
-    public static YoutubePlaylistObject getYoutubePlaylistObject(String playlistId) {
+    public static YoutubePlaylistObject getYoutubePlaylistObject(String playlistId, Integer maxResults, Integer startIndex) {
+        if (startIndex == null) {
+            startIndex = 0;
+        }
+        
+        if (maxResults == null) {
+            maxResults = 50;
+        }
+        
         YoutubePlaylistObject playlist = new YoutubePlaylistObject();
-        String playlistUrl = "http://gdata.youtube.com/feeds/api/playlists/" + playlistId + "?v=2&alt=json";
+        String playlistUrl;
+        
+        if (startIndex == 0) {
+            playlistUrl = "http://gdata.youtube.com/feeds/api/playlists/" + playlistId + "?v=2&alt=json&max-results=" + maxResults;
+        } else {
+            playlistUrl = "http://gdata.youtube.com/feeds/api/playlists/" + playlistId + "?v=2&alt=json&max-results=" + maxResults + "&start-index=" + startIndex;
+        }
         
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse hr;
@@ -132,9 +146,12 @@ public class YoutubeConnection {
         HashMap<String, String> titleObject = (HashMap)feed.get("title");
         String title = titleObject.get("$t");
         playlist.setTitle(title);
+        
+        //printHashMap(playlistMap, 0);
 
         //Get a list of video entries and add them to the playlist.
         ArrayList<Object> videos = (ArrayList)feed.get("entry");
+        
         for (Object video : videos) {
             HashMap<String, Object> videoMap = (HashMap)video;
             HashMap<String, String> contentMap = (HashMap)videoMap.get("content");
@@ -149,6 +166,7 @@ public class YoutubeConnection {
 
                     YoutubeVideoObject youtubeVideo = getYoutubeVideoObject(src);
                     playlist.addYoutubeVideoObject(youtubeVideo);
+                    System.out.println("SRC:" + src);
                 } catch (Exception e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                     continue;
@@ -157,7 +175,23 @@ public class YoutubeConnection {
         }
         
         httpclient.getConnectionManager().shutdown();
-                
+        
+        ArrayList<Object> links  = (ArrayList)feed.get("link");
+        boolean isNext = false;
+        for (Object link : links) {
+            HashMap<String, Object> linkMap = (HashMap)link;
+            String rel = (String)linkMap.get("rel");
+            System.out.println("REL: " + rel);
+            if (rel.equals("next")) {
+                isNext = true;
+            }
+        }
+        
+        if (isNext) {
+            YoutubePlaylistObject recList = getYoutubePlaylistObject(playlistId, maxResults, startIndex + maxResults + 1);
+            playlist.addYoutubePlaylistObject(recList);
+        }
+        
         return playlist;
     }
 
@@ -190,7 +224,10 @@ public class YoutubeConnection {
 
             while ((line = in.readLine()) != null) {
                 if (line.matches("(.*)\"url_encoded_fmt_stream_map\":(.*)")) {
-                    line = line.substring(line.indexOf("=") + 1).trim();
+                    System.out.println("LINE: " + line);
+                    
+                    line = line.substring(line.indexOf("ytplayer.config") + "ytplayer.config".length()).trim();
+                    line = line.substring(line.indexOf("{")).trim();
 
                     HashMap<String, Object> jsonData = mapper.readValue(line, HashMap.class);
                     printHashMap(jsonData, 0);

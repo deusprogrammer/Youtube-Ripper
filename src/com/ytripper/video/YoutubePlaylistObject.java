@@ -24,6 +24,12 @@ public class YoutubePlaylistObject {
         youtubeVideos.add(youtubeVideo);
     }
     
+    public void addYoutubePlaylistObject(YoutubePlaylistObject youtubePlaylistObject) {
+        for (YoutubeVideoObject video : youtubePlaylistObject.getYoutubeVideoObjects()) {
+            youtubeVideos.add(video);
+        }
+    }
+    
     public ArrayList<YoutubeVideoObject> getYoutubeVideoObjects() {
         return youtubeVideos;
     }

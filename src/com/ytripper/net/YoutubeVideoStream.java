@@ -4,9 +4,8 @@
  */
 package com.ytripper.net;
 
-import com.ytripper.video.VideoFormat;
 import com.ytripper.util.StringUtil;
-
+import com.ytripper.video.VideoFormat;
 import java.io.*;
 import java.util.HashMap;
 import org.apache.http.HttpHost;

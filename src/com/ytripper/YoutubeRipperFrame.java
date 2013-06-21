@@ -182,10 +182,9 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(downloadDirectoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(saveButton)
-                            .addComponent(verifyButton))))
+                        .addComponent(saveButton)
+                        .addComponent(verifyButton))
+                    .addComponent(downloadDirectoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addComponent(jLabel3)
                 .addGap(15, 15, 15)
@@ -211,7 +210,7 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_downloadOneButtonActionPerformed
 
     private void downloadPlaylistButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadPlaylistButtonActionPerformed
-        YoutubePlaylistObject playlist = YoutubeConnection.getYoutubePlaylistObject(playlistId.getText());
+        YoutubePlaylistObject playlist = YoutubeConnection.getYoutubePlaylistObject(playlistId.getText(), null, null);
         
         String downloadDirectory = downloadDirectoryField.getText();
         
