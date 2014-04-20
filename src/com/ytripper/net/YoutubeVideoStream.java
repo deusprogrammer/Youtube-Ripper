@@ -56,6 +56,18 @@ public class YoutubeVideoStream implements Comparable {
         this.format = new VideoFormat(itag);
     }
     
+    public boolean hasFormat() {
+        return format != null;
+    }
+    
+    public boolean hasUrl() {
+        return url != null;
+    }
+    
+    public String getUrl() {
+        return url;
+    }
+    
     public void setTitle(String title) {
         this.title = title;
     }
@@ -69,9 +81,11 @@ public class YoutubeVideoStream implements Comparable {
         httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
 
         try {
-            HttpGet httpget = new HttpGet(StringUtil.getURI(url));
-
             System.out.println("Executing request " + url);
+            System.out.println("HOST:  " + StringUtil.getHost(url));
+            System.out.println("URI:   " + StringUtil.getURI(url));
+            System.out.println("QUERY: " + StringUtil.getQuery(url));
+            HttpGet httpget = new HttpGet(StringUtil.getURI(url) + "?" + StringUtil.getQuery(url));
 
             hr = httpclient.execute(target, httpget);
         } catch (Exception e) {

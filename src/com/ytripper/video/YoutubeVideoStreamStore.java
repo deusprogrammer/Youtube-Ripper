@@ -19,8 +19,10 @@ public class YoutubeVideoStreamStore {
     }
     
     public void add(YoutubeVideoStream stream) {
-        System.out.println("ADDING STREAM!");
-        if (stream.getFormat() != null) {
+        if (stream.hasFormat() && stream.hasUrl()) {
+            System.out.println("ADDING STREAM!");
+            System.out.println("\tFORMAT: " + stream.getFormat());
+            System.out.println("\tURL:    " + stream.getUrl());
             streams.add(stream);
             Collections.sort(streams);
         }

@@ -7,7 +7,11 @@ package com.ytripper.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -37,16 +41,49 @@ public class StringUtil {
         }
     }
     
-    public static String getURI(String sURL) {
-        String suri = "/".concat(sURL.replaceFirst(szYTHOSTREGEX, ""));
-        return(suri);
+    public static String getURI(String url) {
+        URL aURL = null;
+        try {
+            aURL = new URL(url);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(StringUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (aURL == null) {
+            return "";
+        }
+        
+        return(aURL.getPath());
     }
 
-    public static String getHost(String sURL) {
-        String shost = sURL.replaceFirst(szYTHOSTREGEX, "");
-        shost = sURL.substring(0, sURL.length()-shost.length());
-        shost = shost.toLowerCase().replaceFirst("http://", "").replaceAll("/", "");
-        return(shost);
+    public static String getHost(String url) {
+        URL aURL = null;
+        try {
+            aURL = new URL(url);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(StringUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (aURL == null) {
+            return "";
+        }
+        
+        return(aURL.getHost());
+    }
+    
+    public static String getQuery(String url) {
+        URL aURL = null;
+        try {
+            aURL = new URL(url);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(StringUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (aURL == null) {
+            return "";
+        }
+        
+        return(aURL.getQuery());
     }
     
     public static String slurp (InputStream in) throws IOException {
