@@ -1,21 +1,21 @@
 # YoutubeRipper Library
 
-	The code is ready to be packaged as a jar.  The library also allows for ripping of entire playlists.  This code works as of 1/17/2013.  However if YouTube changes the way their page is formatted, it could quickly cease function.  Keep that in mind.  However as YouTube changes, I will change the source code in such a way that it won't affect the way the library is used.
+The code is ready to be packaged as a jar.  The library also allows for ripping of entire playlists.  This code works as of 1/17/2013.  However if YouTube changes the way their page is formatted, it could quickly cease function.  Keep that in mind.  However as YouTube changes, I will change the source code in such a way that it won't affect the way the library is used.
 
 
 ## Ripping Algorithm
 
-	The first part of the process is to find a line that contains "url_encoded_fmt_stream_map".  This line contains JSON data.  You can easily parse this into a HashMap with the Jackson library.
+The first part of the process is to find a line that contains "url_encoded_fmt_stream_map".  This line contains JSON data.  You can easily parse this into a HashMap with the Jackson library.
 
-	The second part of the process is to take the map.args.url_encoded_fmt_stream_map and split it at each comma (,).  This will give you the different streams (i.e. different video qualities).
+The second part of the process is to take the map.args.url_encoded_fmt_stream_map and split it at each comma (,).  This will give you the different streams (i.e. different video qualities).
 
-	Then take each stream and split it at each ampersand (&).  This will break it up further and give you a url, quality, itag, sig, type, and fallback_host field.  You can then easily parse these.
+Then take each stream and split it at each ampersand (&).  This will break it up further and give you a url, quality, itag, sig, type, and fallback_host field.  You can then easily parse these.
 
-	Choose which stream you want and take it's sig and url field.
+Choose which stream you want and take it's sig and url field.
 
-	Finally take the url field and replace the encoded characters with their actual characters, and then tag the value of the sig field onto the end of the url (i.e. &signature=<sig>).
+Finally take the url field and replace the encoded characters with their actual characters, and then tag the value of the sig field onto the end of the url (i.e. &signature=<sig>).
 
-	Then you can read the body of the response as the video file.
+Then you can read the body of the response as the video file.
 
 ## Format of a Youtube video request
 
