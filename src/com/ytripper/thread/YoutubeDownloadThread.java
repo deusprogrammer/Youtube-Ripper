@@ -4,9 +4,6 @@
  */
 package com.ytripper.thread;
 
-import com.ytripper.net.YoutubeConnection;
-import com.ytripper.video.YoutubeVideoObject;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

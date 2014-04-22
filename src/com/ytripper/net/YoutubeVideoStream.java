@@ -4,10 +4,18 @@
  */
 package com.ytripper.net;
 
+import com.ytripper.thread.YoutubeDownloadJob;
 import com.ytripper.util.StringUtil;
 import com.ytripper.video.VideoFormat;
+import it.sauronsoftware.jave.AudioAttributes;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.EncodingAttributes;
+import it.sauronsoftware.jave.MultimediaInfo;
 import java.io.*;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -27,6 +35,7 @@ public class YoutubeVideoStream implements Comparable {
     
     protected String title;
     protected String message = null;
+    protected String filePath = null;
     
     protected HashMap<String, String> fmtMap;
    
@@ -72,6 +81,10 @@ public class YoutubeVideoStream implements Comparable {
         this.title = title;
     }
     
+    public String getFilePath() {
+        return filePath;
+    }
+    
     public boolean writeToFile(String downloadDirectory, String filename) {
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse hr;
@@ -110,11 +123,11 @@ public class YoutubeVideoStream implements Comparable {
         filename = filename.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_").replace("!", "").replace("?", "") + "." + format.getCodec();
         
         //Create full path
-        String fullPath = downloadDirectory + "/" + filename;
-        System.out.println("PATH: " + fullPath);
+        filePath = downloadDirectory + "/" + filename;
+        System.out.println("PATH: " + filePath);
 
         try {
-            out = new FileOutputStream(new File(fullPath));
+            out = new FileOutputStream(new File(filePath));
             BufferedInputStream in = new BufferedInputStream(hr.getEntity().getContent());
             byte[] bytes = new byte[4096];
             int bytesRead = 0;
@@ -132,6 +145,40 @@ public class YoutubeVideoStream implements Comparable {
             System.out.println("EXCEPTION: " + e.getMessage());
             message = e.getMessage();
             return false;
+        }
+    }
+    
+    public void convertToMp3(String downloadDirectory, String filename) {
+        //Clean up directory name and create it if it doesn't exist
+        downloadDirectory = downloadDirectory.replace(" ", "_").replace("(", "_").replace(")", "_").replace("!", "").replace("?", "");
+        
+        //Clean up filename
+        String targetPath = filename.replace(" ", "_").replace("(", "_").replace(")", "_").replace("/", "_").replace("!", "").replace("?", "") + ".mp3";
+        
+        //Create full path
+        targetPath = downloadDirectory + "/" + targetPath;
+        
+        System.out.println("SOURCE FOR MP3: " + filePath);
+        System.out.println("TARGET FOR MP3: " + targetPath);
+        
+        File source = new File(filePath);
+        File target = new File(targetPath);
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(128000);
+        audio.setChannels(2);
+        audio.setSamplingRate(44100);
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("mp3");
+        attrs.setAudioAttributes(audio);
+        Encoder encoder = new Encoder();
+        
+        try {
+            encoder.encode(source, target, attrs);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(YoutubeDownloadJob.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EncoderException ex) {
+            Logger.getLogger(YoutubeDownloadJob.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

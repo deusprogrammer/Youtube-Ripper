@@ -252,7 +252,7 @@ public class YoutubeRipperFrame extends javax.swing.JFrame {
 
     private void youtubeUrlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_youtubeUrlMouseClicked
         System.out.println("Mouse clicked!");
-        if (clipboard.getClipboardContents().matches("http://www.youtube.com/.*")) {
+        if (clipboard.getClipboardContents().matches("https://www.youtube.com/.*")) {
             youtubeUrl.setText(clipboard.getClipboardContents());
         }
     }//GEN-LAST:event_youtubeUrlMouseClicked
